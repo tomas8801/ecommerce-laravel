@@ -76,7 +76,17 @@ class OrderController extends Controller
         $order->item_count = \Cart::session(auth()->id())->getContent()->count();
 
         $order->save();
-        dd('order-created', $order);
+
+        // save order items relation
+        $cartItems = \Cart::session(auth()->id())->getContent();
+        foreach ($cartItems as $item) {
+            $order->items()->attach($item->id, ['price' => $item->price, 'quantity'=> $item->quantity]);
+        }
+
+        // empty cart
+        \Cart::session(auth()->id())->clear();
+
+        return 'order completed, thanks for order';
     }
 
     /**
