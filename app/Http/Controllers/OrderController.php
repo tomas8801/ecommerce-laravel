@@ -75,6 +75,10 @@ class OrderController extends Controller
         $order->grand_total = \Cart::session(auth()->id())->getTotal();
         $order->item_count = \Cart::session(auth()->id())->getContent()->count();
 
+        if($request->input('payment_method') == 'paypal'){
+            $order->payment_method = 'PayPal';
+        }
+
         $order->save();
 
         // save order items relation
@@ -83,10 +87,15 @@ class OrderController extends Controller
             $order->items()->attach($item->id, ['price' => $item->price, 'quantity'=> $item->quantity]);
         }
 
+        // payment
+        if($request->input('payment_method') == 'paypal'){
+            $order->payment_method = 'PayPal';
+            // redirect pp
+            return redirect()->route('paypal.checkout', $order->id);
+        }
+
         // empty cart
         \Cart::session(auth()->id())->clear();
-
-        return 'order completed, thanks for order';
     }
 
     /**

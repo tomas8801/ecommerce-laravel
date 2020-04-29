@@ -30,6 +30,21 @@
             <input type="text" name="shipping_phone" id="" class="form-control" placeholder="">
         </div>
 
+        <h4>Payment options</h4>
+        <div class="form-check">
+            <label class="form-check-label">
+            <input type="radio" class="form-check-input" name="payment_method" id="" value="cash_on_delivery">
+            Cash on delivery
+          </label>
+        </div>
+
+        <div class="form-check">
+            <label class="form-check-label">
+            <input type="radio" class="form-check-input" name="payment_method" id="" value="paypal">
+            PayPal
+          </label>
+        </div>
+
         <button type="submit" class="btn btn-primary">Place Order</button>
     </form>
 @endsection
