@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Mail\OrderPaid;
 use Illuminate\Http\Request;
 use NunoMaduro\Collision\Provider;
+use Illuminate\Support\Facades\Mail;
 use Srmklive\PayPal\Services\ExpressCheckout;
 
 class PayPalController extends Controller
@@ -65,7 +67,8 @@ class PayPalController extends Controller
                 $order->is_paid = 1;
                 $order->save();
 
-                dd('Payment successful');
+                // Send mail
+                Mail::to($order->user->email)->send(new OrderPaid($order));
                 return redirect()->route('home')->withMessage('Payment successful!');
             }
 
